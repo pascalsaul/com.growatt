@@ -78,6 +78,12 @@
         "ar": "الطاقة المفرغة"
       },
       "decimals": 2
+    },
+    "measure_battery_soh": {
+      "uiComponent": null
+    },
+    "measure_temperature_battery": {
+      "uiComponent": null
     }
   },
   "energy": {

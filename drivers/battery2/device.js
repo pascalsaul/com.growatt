@@ -20,6 +20,7 @@ along with com.growatt.  If not, see <http://www.gnu.org/licenses/>.
 'use strict';
 
 const Device = require('../../lib/common_device');
+const { hydrateOfficialCapabilities } = require('../../lib/arkxhLegacyAliases');
 
 module.exports = class MyDevice extends Device {
 
@@ -40,6 +41,7 @@ module.exports = class MyDevice extends Device {
       return;
     }
     await super.onInit();
+    if (!this.restarting && this.deviceType === 'sph') await hydrateOfficialCapabilities(this);
   }
 
   async onAdded() {
