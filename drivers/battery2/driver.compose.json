@@ -26,11 +26,9 @@
     "alarm_battery_discharge_forbidden",
     "alarm_bms_error",
     "measure_battery_cycles",
-    "measure_battery_soh",
     "measure_current_battery",
     "measure_current_charge_limit",
     "measure_current_discharge_limit",
-    "measure_temperature_battery",
     "measure_temperature_bms",
     "measure_temperature_cell_max",
     "measure_temperature_cell_min",
@@ -78,12 +76,6 @@
         "ar": "الطاقة المفرغة"
       },
       "decimals": 2
-    },
-    "measure_battery_soh": {
-      "uiComponent": null
-    },
-    "measure_temperature_battery": {
-      "uiComponent": null
     }
   },
   "energy": {
