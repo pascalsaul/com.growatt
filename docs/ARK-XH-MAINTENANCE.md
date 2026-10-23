@@ -17,7 +17,7 @@ It retains the additional read-only ARK-XH BMS capabilities originally proposed 
 
 ## Automatic upstream updates
 
-The workflow [arkxh-upstream-sync.yml](../.github/workflows/arkxh-upstream-sync.yml)
+The workflow [arkxh-upstream-sync.yml](https://github.com/pascalsaul/com.growatt/blob/main/.github/workflows/arkxh-upstream-sync.yml)
 lives on the default `main` branch, runs weekly on Monday at 06:17 **UTC**,
 and can also be started using **Actions → Propose Growatt upstream updates for
 ARK-XH → Run workflow** (select `main`).
@@ -40,7 +40,7 @@ pull requests**. The workflow itself requests `contents: write` and
 setting is off, validation can succeed but PR creation will be rejected.
 
 The separate
-[arkxh-validate.yml](../.github/workflows/arkxh-validate.yml) workflow
+[arkxh-validate.yml](https://github.com/pascalsaul/com.growatt/blob/custom/ark-xh/.github/workflows/arkxh-validate.yml) workflow
 validates changes pushed to `custom/ark-xh` and PRs targeting it. Note that
 GitHub does not normally trigger additional PR workflows from a PR opened
 with `GITHUB_TOKEN`; the upstream-sync job therefore performs validation
