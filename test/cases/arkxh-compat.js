@@ -1,6 +1,7 @@
 'use strict';
 
 const { hydrateOfficialCapabilities } = require('../../lib/arkxhLegacyAliases');
+const growattMap = require('../../lib/growattMap');
 
 const fake = (values, options = {}) => {
   const state = { values: { ...values }, options: { ...options }, writes: [] };
@@ -30,6 +31,13 @@ const fake = (values, options = {}) => {
 };
 
 module.exports = async (t) => {
+  const sph = growattMap.battery2Map.sph;
+  const sample = { bmsSOH: 98, batteryTemperature: 22.8 };
+  t.eq(sph.measure_soh[1](sample), 98, 'upstream SOH remains the active reading');
+  t.eq(sph.measure_temperature[1](sample), 22.8, 'upstream temperature remains the active reading');
+  t.eq(sph.measure_battery_soh[1](sample), undefined, 'legacy SOH no longer writes new Insights points');
+  t.eq(sph.measure_temperature_battery[1](sample), undefined, 'legacy temperature no longer writes new Insights points');
+
   const d = fake({
     measure_battery_soh: 98,
     measure_soh: null,
