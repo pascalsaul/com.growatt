@@ -1,0 +1,115 @@
+name: Propose Growatt upstream updates for ARK-XH
+
+# Scheduled workflows only run from the default branch (main).
+# The maintained Homey app is on custom/ark-xh; never merge automatically.
+on:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: arkxh-upstream-proposal
+  cancel-in-progress: false
+
+jobs:
+  propose:
+    if: github.repository == 'pascalsaul/com.growatt'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout maintained ARK-XH branch
+        uses: actions/checkout@v4
+        with:
+          ref: custom/ark-xh
+          fetch-depth: 0
+
+      - name: Merge upstream into a temporary local commit
+        id: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          git remote add upstream https://github.com/gruijter/com.growatt.git
+          git fetch --no-tags upstream main
+          upstream_sha="$(git rev-parse FETCH_HEAD)"
+          echo "upstream_sha=$upstream_sha" >> "$GITHUB_OUTPUT"
+
+          if git merge-base --is-ancestor "$upstream_sha" HEAD; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Already contains the latest upstream main ($upstream_sha)." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git merge --no-ff --no-edit "$upstream_sha"; then
+            {
+              echo "## ARK-XH upstream update needs manual conflict resolution"
+              echo
+              echo "No branch was overwritten and no update PR was opened."
+              echo
+              echo "Conflicting files:"
+              git diff --name-only --diff-filter=U | sed 's/^/- /'
+              echo
+              echo "Upstream commit: $upstream_sha"
+            } >> "$GITHUB_STEP_SUMMARY"
+            git merge --abort || true
+            exit 1
+          fi
+
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          {
+            echo "## Upstream merge prepared"
+            echo
+            echo "Upstream commit: $upstream_sha"
+            echo "The new version must pass validation and receive manual review."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Set up Node.js
+        if: steps.upstream.outputs.changed == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        if: steps.upstream.outputs.changed == 'true'
+        run: npm ci
+
+      - name: Install Homey CLI
+        if: steps.upstream.outputs.changed == 'true'
+        run: npm install --global homey
+
+      - name: Validate merged Homey app
+        if: steps.upstream.outputs.changed == 'true'
+        run: homey app validate
+
+      - name: Run tests if available
+        if: steps.upstream.outputs.changed == 'true'
+        run: npm test --if-present
+
+      - name: Open or update a DRAFT review PR
+        if: steps.upstream.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v8
+        with:
+          base: custom/ark-xh
+          branch: automation/upstream-into-arkxh
+          delete-branch: true
+          draft: true
+          commit-message: 'chore: integrate Growatt upstream changes for ARK-XH review'
+          title: 'chore: review latest upstream Growatt changes for ARK-XH'
+          body: |
+            Automated **draft** integration proposal for the maintained ARK-XH Homey fork.
+
+            - Base: `custom/ark-xh` (16 additional BMS telemetry capabilities)
+            - Source: `gruijter/com.growatt:main`
+            - Created only after a conflict-free merge, `npm ci`, Homey app validation and available npm tests.
+            - **Do not merge without checking battery capability IDs, device migration and SOH/temperature duplication.**
+            - After review and manual merge, revalidate and install locally using `homey.cmd app install`.
+            - This workflow NEVER installs to Homey or merges the PR.
+
+            Original contribution: https://github.com/gruijter/com.growatt/pull/23
+            Related to: https://github.com/gruijter/com.growatt/issues/8
