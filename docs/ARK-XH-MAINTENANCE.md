@@ -66,24 +66,28 @@ ARK-XH `measure_battery_soh` and `measure_temperature_battery` capabilities
 were removed from the **battery2** driver and the BMS mapping; all other 14
 custom ARK-XH metrics remain active. The temporary legacy-alias code is removed.
 
-**Homey migration requires two installations/releases:**
+**Two-stage migration for devices that previously had the custom fields:**
 
-1. **Migration release (this branch):** leave the two old custom capability
-   **definitions** in `.homeycompose/capabilities` temporarily, despite their
-   absence from the driver and mapping. Homey's normal
-   `DeviceMigrator.migrateCapabilities` then calls `removeCapability`
-   on existing devices. Removing the definitions in the same release can
-   cause Homey to reject capability migration with "Invalid Capability".
-2. **Cleanup release (after the Homey device shows neither old capability):**
-   delete their two JSON definitions and install again. This eliminates
-   them from the application manifest as well.
+1. Install the `custom/ark-xh` migration release corresponding to
+   [PR #2](https://github.com/pascalsaul/com.growatt/pull/2). That version
+   removes the two legacy capabilities from the device's capability list while
+   keeping their manifest definitions temporarily available, allowing
+   `removeCapability` to complete.
+2. **Confirm on Homey** that both `measure_battery_soh` and
+   `measure_temperature_battery` have actually disappeared from the existing
+   battery device, and that official `measure_soh` / `measure_temperature`
+   work. Only then install the follow-up cleanup version that deletes the two
+   leftover JSON definitions.
 
-Removing a capability can delete its historical Insights series and break
-Flows that reference the old capability ID; this is an intentional tradeoff
-in favour of using the standard Growatt 2.6.0 capabilities. Export any
-historical measurements you want to keep *before* installing the migration
-release. The official capabilities have distinct, independent Insights series
-and do not inherit the old history.
+This final cleanup removes the two unused JSON definitions from the application
+manifest, leaving **14 ARK-XH-specific capabilities** and the built-in Growatt
+SOH/temperature fields. Never install this cleanup stage directly over a
+pre-migration version that still has either old capability.
+
+Removing the retired device capabilities may delete their former Insights
+history and break old Flows using their IDs; the user deliberately chose the
+standard upstream readings instead. Export historical Insights beforehand if
+they matter. The standard fields do not inherit any previous custom history.
 
 Never delete the existing Growatt app or battery device to perform this
 migration.

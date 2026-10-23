@@ -6,10 +6,16 @@
  */
 const map = require('../../lib/growattMap');
 const DeviceMigrator = require('../../lib/DeviceMigrator');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const dropped = ['measure_battery_soh', 'measure_temperature_battery'];
 
 module.exports = async (t) => {
+  for (const old of dropped) {
+    const file = path.join(__dirname, '..', '..', '.homeycompose', 'capabilities', `${old}.json`);
+    t.ok(!fs.existsSync(file), `${old}: obsolete manifest definition deleted`);
+  }
   const sph = map.battery2Map.sph;
   const sample = { bmsSOH: 98, batteryTemperature: 22.8 };
   t.eq(sph.measure_soh[1](sample), 98, 'only upstream measure_soh reads SOH');
