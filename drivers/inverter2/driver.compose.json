@@ -1,4 +1,7 @@
 {
+  "$extends": [
+    "growatt_v2"
+  ],
   "name": {
     "en": "Solar inverter",
     "nl": "PV omvormer",
@@ -41,108 +44,126 @@
     },
     "measure_power": {
       "title": {
-        "en": "Solar Power (AC)",
-        "nl": "Zonne-energie (AC)",
-        "da": "Solenergi (AC)",
+        "en": "Solar power (AC)",
+        "nl": "Zonnevermogen (AC)",
+        "da": "Soleffekt (AC)",
         "de": "Solarleistung (AC)",
-        "es": "Energía solar (CA)",
-        "fr": "Énergie solaire (CA)",
-        "it": "Energia solare (CA)",
-        "no": "Solenergi (AC)",
-        "sv": "Solenergi (AC)",
+        "es": "Potencia solar (CA)",
+        "fr": "Puissance solaire (CA)",
+        "it": "Potenza solare (CA)",
+        "no": "Soleffekt (AC)",
+        "sv": "Soleffekt (AC)",
         "pl": "Moc słoneczna (AC)",
-        "ru": "Солнечная энергия (AC)",
+        "ru": "Солнечная мощность (AC)",
         "ko": "태양광 전력(AC)",
-        "ar": "الطاقة الشمسية (AC)"
+        "ar": "القدرة الشمسية (AC)"
       },
       "decimals": 0
     },
     "measure_power.dc_solar": {
       "title": {
-        "en": "Solar Power (DC)",
-        "nl": "Zonne-energie (DC)",
-        "da": "Solenergi (DC)",
+        "en": "Solar power (DC)",
+        "nl": "Zonnevermogen (DC)",
+        "da": "Soleffekt (DC)",
         "de": "Solarleistung (DC)",
-        "es": "Energía solar (CC)",
-        "fr": "Énergie solaire (CC)",
-        "it": "Energia solare (CC)",
-        "no": "Solenergi (DC)",
-        "sv": "Solenergi (DC)",
+        "es": "Potencia solar (CC)",
+        "fr": "Puissance solaire (CC)",
+        "it": "Potenza solare (CC)",
+        "no": "Soleffekt (DC)",
+        "sv": "Soleffekt (DC)",
         "pl": "Moc słoneczna (DC)",
-        "ru": "Солнечная энергия (DC)",
+        "ru": "Солнечная мощность (DC)",
         "ko": "태양광 전력(DC)",
-        "ar": "الطاقة الشمسية (DC)"
+        "ar": "القدرة الشمسية (DC)"
+      },
+      "decimals": 0
+    },
+    "measure_power.dc_converter": {
+      "title": {
+        "en": "Converter output (DC)",
+        "nl": "Converteruitgang (DC)",
+        "da": "Konverterudgang (DC)",
+        "de": "Wandlerausgang (DC)",
+        "es": "Salida convertidor (CC)",
+        "fr": "Sortie convertisseur (CC)",
+        "it": "Uscita convertitore (CC)",
+        "no": "Omformerutgang (DC)",
+        "sv": "Omvandlarutgång (DC)",
+        "pl": "Wyjście konwertera (DC)",
+        "ru": "Выход конвертера (DC)",
+        "ko": "컨버터 출력(DC)",
+        "ar": "خرج المحول (DC)"
       },
       "decimals": 0
     },
     "measure_power.ac_inverter": {
       "title": {
-        "en": "Inverter Power (AC)",
+        "en": "Inverter power (AC)",
         "nl": "Omvormer vermogen (AC)",
         "da": "Inverter effekt (AC)",
-        "de": "Wechselrichterleistung (AC)",
-        "es": "Potencia del inversor (CA)",
-        "fr": "Puissance de l'onduleur (CA)",
+        "de": "Inverterleistung (AC)",
+        "es": "Potencia inversor (CA)",
+        "fr": "Puissance onduleur (CA)",
         "it": "Potenza inverter (CA)",
         "no": "Inverter effekt (AC)",
         "sv": "Växelriktareffekt (AC)",
         "pl": "Moc falownika (AC)",
         "ru": "Мощность инвертора (AC)",
         "ko": "인버터 전력(AC)",
-        "ar": "طاقة العاكس (AC)"
+        "ar": "قدرة العاكس (AC)"
       },
       "decimals": 0
     },
     "target_power": {
       "decimals": 0
+    },
+    "meter_power.dc_solar": {
+      "title": {
+        "en": "Solar energy (DC)",
+        "nl": "Zonopbrengst (DC)",
+        "da": "Solproduktion (DC)",
+        "de": "Solarertrag (DC)",
+        "es": "Producción solar (CC)",
+        "fr": "Production solaire (CC)",
+        "it": "Produzione solare (CC)",
+        "no": "Solproduksjon (DC)",
+        "sv": "Solproduktion (DC)",
+        "pl": "Uzysk słoneczny (DC)",
+        "ru": "Солнечная энергия (DC)",
+        "ko": "태양광 발전량 (DC)",
+        "ar": "الطاقة الشمسية (DC)"
+      },
+      "decimals": 2
+    },
+    "meter_power.ac_inverter": {
+      "title": {
+        "en": "Inverter energy (AC)",
+        "nl": "Omvormeropbrengst (AC)",
+        "da": "Inverterproduktion (AC)",
+        "de": "Inverterertrag (AC)",
+        "es": "Energía inversor (CA)",
+        "fr": "Énergie onduleur (CA)",
+        "it": "Energia inverter (CA)",
+        "no": "Inverterproduksjon (AC)",
+        "sv": "Växelriktarenergi (AC)",
+        "pl": "Uzysk falownika (AC)",
+        "ru": "Энергия инвертора (AC)",
+        "ko": "인버터 발전량 (AC)",
+        "ar": "إنتاج العاكس (AC)"
+      },
+      "decimals": 2
     }
   },
   "platforms": [
     "local",
     "cloud"
   ],
-  "connectivity": ["cloud"],
+  "connectivity": [
+    "cloud"
+  ],
   "images": {
     "small": "{{driverAssetsPath}}/images/small.png",
     "large": "{{driverAssetsPath}}/images/large.png",
     "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
-  },
-  "pair": [
-    {
-      "id": "login_credentials",
-      "template": "login_credentials",
-      "options": {
-        "title": {
-          "en": "Get your API token in the ShinePhone app",
-          "nl": "Haal je API token op in de ShinePhone app",
-          "da": "Få din API-token i ShinePhone-appen",
-          "de": "Holen Sie sich Ihr API-Token in der ShinePhone-App",
-          "es": "Obtenga su token API en la aplicación ShinePhone",
-          "fr": "Obtenez votre jeton API dans l'application ShinePhone",
-          "it": "Ottieni il tuo token API nell'app ShinePhone",
-          "no": "Få API-tokenet ditt i ShinePhone-appen",
-          "sv": "Hämta din API-token i ShinePhone-appen",
-          "pl": "Pobierz swój token API w aplikacji ShinePhone",
-          "ru": "Получите ваш API токен в приложении ShinePhone",
-          "ko": "ShinePhone 앱에서 API 토큰을 가져오세요",
-          "ar": "احصل على رمز API الخاص بك في تطبيق ShinePhone"
-        },
-        "usernameLabel": { "en": "Username", "nl": "Gebruikersnaam", "da": "Brugernavn", "de": "Benutzername", "es": "Nombre de usuario", "fr": "Nom d'utilisateur", "it": "Nome utente", "no": "Brukernavn", "sv": "Användarnamn", "pl": "Nazwa użytkownika", "ru": "Имя пользователя", "ko": "사용자 이름", "ar": "اسم المستخدم" },
-        "passwordLabel": { "en": "API Token", "nl": "API Token", "da": "API Token", "de": "API-Token", "es": "Token API", "fr": "Jeton API", "it": "Token API", "no": "API Token", "sv": "API-token", "pl": "Token API", "ru": "API токен", "ko": "API 토큰", "ar": "رمز API" },
-        "passwordPlaceholder": { "en": "My account>User name>API Token", "nl": "Mijn account>Gebruikersnaam>API Token", "da": "Min konto>Brugernavn>API Token", "de": "Mein Konto>Benutzername>API-Token", "es": "Mi cuenta>Nombre de usuario>Token API", "fr": "Mon compte>Nom d'utilisateur>Jeton API", "it": "Il mio account>Nome utente>Token API", "no": "Min konto>Brukernavn>API Token", "sv": "Mitt konto>Användarnamn>API-token", "pl": "Moje konto>Nazwa użytkownika>Token API", "ru": "Мой аккаунт>Имя пользователя>API токен", "ko": "내 계정>사용자 이름>API 토큰", "ar": "حسابي>اسم المستخدم>رمز API" },
-        "logo": "../assets/images/small.png"
-      }
-    },
-		{
-			"id": "list_devices",
-			"template": "list_devices",
-			"navigation": {
-				"next": "add_devices"
-			}
-		},
-		{
-			"id": "add_devices",
-			"template": "add_devices"
-		}
-	]
+  }
 }

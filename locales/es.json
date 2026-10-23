@@ -1,0 +1,24 @@
+{
+  "errors": {
+    "permissionDenied": "Permiso denegado. Comprueba tu token API.",
+    "rateLimited": "Demasiadas solicitudes. Espera 5 minutos.",
+    "apiProblem": "Problema con la API. Contacta con service.nl@growatt.com para corregir tu cuenta.",
+    "userNotFound": "El usuario no existe en ningún servidor.",
+    "httpRequestFailed": "Error en la solicitud HTTP",
+    "unexpectedResponse": "Respuesta inesperada del servidor",
+    "timeout": "El servidor de Growatt no respondió a tiempo.",
+    "unreachable": "No se puede conectar con el servidor de Growatt. Comprueba la conexión a Internet.",
+    "commandRejected": "El inversor rechazó el comando. Puede que el control remoto esté desactivado en el inversor o que se necesite un medidor inteligente.",
+    "commandRejectedOrOffline": "El inversor rechazó el comando o no responde. Puede que el control remoto esté desactivado o que esté sin conexión.",
+    "actionNotSupported": "Este dispositivo no admite __action__.",
+    "deviceNotOnAccount": "Este dispositivo no está en esa cuenta de Growatt."
+  },
+  "status": {
+    "migrating": "Migrando. Espera...",
+    "noUpdates": "Sin actualizaciones del dispositivo",
+    "staleData": "Sin datos nuevos desde __since__. Compruebe la conexión del datalogger.",
+    "deviceTypeChanged": "Growatt ahora muestra este dispositivo como __type__. Repare el dispositivo para actualizarlo.",
+    "deprecatedDevice": "Dispositivo de prueba obsoleto. Elimínalo y vuelve a añadirlo.",
+    "batteryMerged": "Combinado con el dispositivo de batería de la unidad. Elimina este dispositivo."
+  }
+}

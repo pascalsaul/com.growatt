@@ -22,19 +22,31 @@ along with com.growatt.  If not, see <http://www.gnu.org/licenses/>.
 const Homey = require('homey');
 const Growatt = require('growatt'); // v1 API
 const Api = require('./lib/growatt_api'); // v2 API
+const growattMap = require('./lib/growattMap');
+const capture = require('./lib/growattCapture');
+const timing = require('./lib/growattTiming');
 
 module.exports = class MyApp extends Homey.App {
 
   async onInit() {
-    this.devices = {};// { serial: { username, token, serial, type } }; is filled by Homey devices through getSessions
+    capture.setLog((line) => this.log(line));
+    capture.arm('app start', { force: true });
+    this.devices = {}; // pollKey: { username, token, host, deviceSn, deviceType }
     this.apiSessions = {}; // username__token: apiSession
-    this.everyXminutes(5); // start poll emitter
+    this.pollSchedules = {}; // pollKey: { timeoutId, cadence, lastUploadAt, lastPollAt }
+    this.everyXminutes(5); // reconciles the per-device schedules; the polls themselves are theirs
     this.pendingPolls = {}; // prevents concurrent polling
-    this.registerFlowListeners(); // register flow listeners
+    this.cooldownNotified = {}; // one log line per rate-limit cooldown, not per skipped poll
+    this.registerFlowListeners();
 
-    // Trigger initial grouped poll 15 seconds after app boot to allow devices to initialize
+    // remove a settings key no longer used
+    try {
+      if (this.homey.settings.get('apiRateLimits') !== null) this.homey.settings.unset('apiRateLimits');
+    } catch { /* best effort - a leftover key is not worth failing startup over */ }
+
+    // after 15 s, so devices have initialised
     this.bootPollTimeoutId = this.homey.setTimeout(() => {
-      this.log('Performing initial grouped poll');
+      this.log('Starting per-device polling');
       this.everyXminutesHandler().catch(this.error);
     }, 15000);
 
@@ -57,6 +69,10 @@ module.exports = class MyApp extends Homey.App {
     if (this.bootPollTimeoutId) {
       this.homey.clearTimeout(this.bootPollTimeoutId);
     }
+    Object.values(this.pollSchedules || {}).forEach((schedule) => {
+      if (schedule.timeoutId) this.homey.clearTimeout(schedule.timeoutId);
+    });
+    this.pollSchedules = {};
     this.homey.removeAllListeners('lastData');
     this.homey.removeAllListeners('errorInfo');
 
@@ -66,38 +82,43 @@ module.exports = class MyApp extends Homey.App {
 
   }
 
-  // get or create API session, centralized for all drivers and devices
+  // one API session per account, shared by all drivers and devices
   getSession(device) {
     const username = device.username || '';
     const token = device.token || '';
     const host = device.host || 'openapi.growatt.com';
     const sessionName = `${username}__${token}`;
-    // check if session is connected
     if (!this.apiSessions[sessionName]) {
-      this.apiSessions[sessionName] = new Api({ user_name: username, token, host });
+      this.apiSessions[sessionName] = new Api({
+        user_name: username, token, host, homey: this.homey,
+      });
       this.log('New session created for', `${username}__${token}`, 'on', host);
     } else {
-      this.apiSessions[sessionName].host = host; // update host if auto-discovery found a new one
+      this.apiSessions[sessionName].host = host; // discovery may have found another host
     }
     return this.apiSessions[sessionName];
   }
 
-  // helper to fetch all Homey devices and settings
   async getDevices() {
     try {
       const inverters = this.homey.drivers.getDriver('inverter2').getDevices();
       const meters = this.homey.drivers.getDriver('meter2').getDevices();
-      const batteries = this.homey.drivers.getDriver('battery2').getDevices();
+      const batteries = this.homey.drivers.getDriver('battery2').getDevices()
+        .filter((device) => !device.isMergedBattery);
       const devices = [...inverters, ...meters, ...batteries];
-      this.devices = {}; // Clear old state to prevent polling deleted devices
+      this.devices = {}; // so deleted devices are not polled
+      // one entry per distinct poll: devices sharing a serial (inverter2/meter2/battery2) can differ
+      // in credentials or type after a repair
       devices.forEach((device) => {
         const {
           username, token, host, deviceSn, deviceType,
         } = device.getSettings();
-        this.devices[`${deviceSn}`] = {
+        const entry = {
           username, token, host, deviceSn, deviceType,
         };
+        this.devices[MyApp.pollKey(entry)] = entry;
       });
+
       return Promise.resolve(this.devices);
     } catch (error) {
       this.error(error);
@@ -105,7 +126,7 @@ module.exports = class MyApp extends Homey.App {
     }
   }
 
-  // poll getLastData, centralized for all devices every X minutes
+  // Housekeeping tick: starts and stops per-device schedules; makes no API calls itself.
   everyXminutes(interval) {
     const scheduleNextXminutes = () => {
       if (this.pollTimeoutId) {
@@ -120,46 +141,102 @@ module.exports = class MyApp extends Homey.App {
       // console.log('everyXminutes starts in', timeToNextXminutes / 1000);
       this.pollTimeoutId = this.homey.setTimeout(() => {
         this.everyXminutesHandler().catch(this.error);
-        scheduleNextXminutes(); // Schedule the next X minutes
+        scheduleNextXminutes();
       }, timeToNextXminutes);
     };
     scheduleNextXminutes();
     this.log('everyXminutes job started');
   }
 
-  async everyXminutesHandler() {
+  // `force` (force_poll flow card) polls every device now; repeats inside a window come from cache.
+  async everyXminutesHandler(force = false) {
     await this.getDevices().catch(this.error);
-
-    // Group by session and deviceType to query multiple SNs in one API call
-    const groups = {};
+    this.reconcileSchedules();
+    if (!force) return;
     for (const device of Object.values(this.devices)) {
-      const key = `${device.username}__${device.token}__${device.deviceType}`;
-      if (!groups[key]) {
-        groups[key] = {
-          sessionDevice: device,
-          sns: new Set(),
-        };
-      }
-      groups[key].sns.add(device.deviceSn);
+      await this.runDevicePoll(device).catch(this.error);
     }
+  }
 
-    for (const group of Object.values(groups)) {
-      const repDevice = { ...group.sessionDevice, deviceSn: Array.from(group.sns).join(',') };
-      await this.pollDevice(repDevice).catch(this.error);
-      // Small delay between group requests to prevent burst rate limiting
-      await new Promise((resolve) => this.homey.setTimeout(resolve, 2000));
+  // Upload time of this device's entry; without one a device polls at a fixed interval.
+  static uploadTimeOf(lastData, deviceSn) {
+    if (!lastData) return 0;
+    for (const list of Object.values(lastData)) {
+      if (!Array.isArray(list)) continue;
+      const entry = list.find((e) => e && e.deviceSn === deviceSn);
+      if (entry) return growattMap.uploadTimeOf(entry);
     }
+    return 0;
+  }
+
+  static pollKey(device) {
+    return `${device.username}|${device.token}|${device.host}|${device.deviceType}|${device.deviceSn}`;
+  }
+
+  reconcileSchedules() {
+    Object.keys(this.pollSchedules).forEach((key) => {
+      if (this.devices[key]) return;
+      const schedule = this.pollSchedules[key];
+      if (schedule.timeoutId) this.homey.clearTimeout(schedule.timeoutId);
+      delete this.pollSchedules[key];
+      this.log('Stopped polling', schedule.label);
+    });
+    let added = 0;
+    Object.entries(this.devices).forEach(([key, device]) => {
+      if (this.pollSchedules[key]) return;
+      this.pollSchedules[key] = timing.newSchedule(device);
+      this.scheduleDevicePoll(device, added * timing.POLL_STAGGER);
+      added += 1;
+      this.log('Started polling', `${device.deviceSn} (${device.deviceType})`);
+    });
+  }
+
+  scheduleDevicePoll(device, delay) {
+    const schedule = this.pollSchedules[MyApp.pollKey(device)];
+    if (!schedule) return;
+    if (schedule.timeoutId) this.homey.clearTimeout(schedule.timeoutId);
+    schedule.timeoutId = this.homey.setTimeout(() => {
+      this.runDevicePoll(device).catch(this.error);
+    }, delay);
+  }
+
+  // Poll one device, then schedule the next poll just after its next upload.
+  async runDevicePoll(device) {
+    const key = MyApp.pollKey(device);
+    const schedule = this.pollSchedules[key];
+    if (!schedule) return;
+    schedule.lastPollAt = Date.now();
+    const lastData = await this.pollDevice(device).catch(() => null);
+    if (this.pollSchedules[key] !== schedule) return; // restarted meanwhile
+
+    const uploadAt = MyApp.uploadTimeOf(lastData, device.deviceSn);
+    const target = timing.nextPollAt(schedule, uploadAt, device.deviceType);
+    this.scheduleDevicePoll(device, Math.max(1000, target - Date.now()));
   }
 
   async pollDevice(device) {
     try {
-      const cacheKey = `${device.deviceSn}_${device.deviceType}`;
+      const cacheKey = MyApp.pollKey(device);
       if (this.pendingPolls[cacheKey]) {
         return await this.pendingPolls[cacheKey];
       }
 
       const session = this.getSession(device);
+
       const options = { deviceSn: device.deviceSn, deviceType: device.deviceType };
+
+      // inside this request's window: skip quietly, logged once per cooldown
+      const cooldownUntil = session.lastDataCooldownUntil(options);
+      if (cooldownUntil) {
+        const pollKey = `${device.username}__${device.deviceSn}__${device.deviceType}`;
+        if (this.cooldownNotified[pollKey] !== cooldownUntil) {
+          this.cooldownNotified[pollKey] = cooldownUntil;
+          const secs = Math.ceil((cooldownUntil - Date.now()) / 1000);
+          this.log('Rate limited, skipping poll for', `${device.username} ${device.deviceSn} (${device.deviceType})`, `for ${secs}s`);
+        }
+        return null;
+      }
+
       this.log('Fetching last data for', `${device.username} ${device.deviceSn}, ${device.deviceType}`);
 
       const pollPromise = (async () => {
@@ -168,19 +245,13 @@ module.exports = class MyApp extends Homey.App {
           Object.values(lastData).forEach((list) => {
             if (Array.isArray(list)) {
               list.forEach((d) => {
-                if (d.serialNum && !d.deviceSn) d.deviceSn = d.serialNum;
-                if (d.inverterId && !d.deviceSn) d.deviceSn = d.inverterId;
-                if (d.mixSn && !d.deviceSn) d.deviceSn = d.mixSn;
-                if (d.spaSn && !d.deviceSn) d.deviceSn = d.spaSn;
-                if (d.hpsSn && !d.deviceSn) d.deviceSn = d.hpsSn;
-                if (d.tlxSn && !d.deviceSn) d.deviceSn = d.tlxSn;
-                if (d.maxSn && !d.deviceSn) d.deviceSn = d.maxSn;
-                if (d.pcsSn && !d.deviceSn) d.deviceSn = d.pcsSn;
+                if (!d.deviceSn) d.deviceSn = growattMap.deviceSnOf(d);
               });
             }
           });
         }
-        this.homey.emit('lastData', lastData); // emit info to devices
+        // with the polled device(s), so devices can ignore other accounts' polls
+        this.homey.emit('lastData', { lastData, device });
         return lastData;
       })();
 
@@ -191,16 +262,15 @@ module.exports = class MyApp extends Homey.App {
     } catch (error) {
       const msg = error.message || error;
       this.log('Error fetching last data for', `${device.username} ${device.deviceSn}: ${msg}`);
-      const cacheKey = `${device.deviceSn}_${device.deviceType}`;
+      const cacheKey = MyApp.pollKey(device);
       delete this.pendingPolls[cacheKey];
-      this.homey.emit('errorInfo', { device, error: msg }); // emit error to devices
+      // listeners match the reason; the message is localized
+      this.homey.emit('errorInfo', { device, error: msg, reason: error.reason });
       return Promise.reject(msg); // return info to driver
     }
   }
 
-  // register flow card listeners
   registerFlowListeners() {
-    // custom action cards
     const actionListeners = [];
     const actionList = Homey.manifest.flow.actions;
     actionList.forEach((action, index) => {
@@ -210,19 +280,19 @@ module.exports = class MyApp extends Homey.App {
         try {
           // special case for force poll
           if (action.id === 'force_poll') {
-            args.device.log(`Flow action ${action.id} called.`);
-            this.everyXminutesHandler().catch(this.error);
+            this.log(`Flow action ${action.id} called.`); // an app card: no device argument
+            this.everyXminutesHandler(true).catch(this.error);
 
             // DEPRECATED V1
             this.everyXminutesHandlerV1().catch(this.error);
 
             return;
           }
-          // all other actions
           args.device.log(`Flow action ${action.id} called with value ${args.val}`);
           await args.device.handleFlowAction({ action: action.id, val: args.val });
         } catch (error) {
           this.error(error);
+          throw error; // the flow card shows it as failed
         }
       });
     });
@@ -232,7 +302,7 @@ module.exports = class MyApp extends Homey.App {
   everyXminutesV1(interval) {
     const scheduleNextXminutes = () => {
       if (this.pollTimeoutIdV1) {
-        this.homey.clearTimeout(this.pollTimeoutIdV1); // Clear any existing timeout
+        this.homey.clearTimeout(this.pollTimeoutIdV1);
       }
       const now = new Date();
       const nextXminutes = new Date(now);
@@ -243,7 +313,7 @@ module.exports = class MyApp extends Homey.App {
       // console.log('everyXminutes starts in', timeToNextXminutes / 1000);
       this.pollTimeoutIdV1 = this.homey.setTimeout(() => {
         this.everyXminutesHandlerV1().catch(this.error);
-        scheduleNextXminutes(); // Schedule the next X minutes
+        scheduleNextXminutes();
       }, timeToNextXminutes);
     };
     scheduleNextXminutes();

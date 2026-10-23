@@ -61,9 +61,34 @@ const sphBmsMap = {
 
 module.exports = class MyDevice extends Device {
 
+  // a second battery device ('<sn>.bat2', paired before one device per unit) was never a real battery
+  get isMergedBattery() {
+    return String(this.getData().id).endsWith('.bat2');
+  }
+
   async onInit() {
     if (growattMap.battery2Map?.sph) Object.assign(growattMap.battery2Map.sph, sphBmsMap);
+    if (this.isMergedBattery) {
+      this.restarting = false;
+      this.log(`${this.getName()} is a second battery device; the unit's batteries are one device now`);
+      await this.setUnavailable(this.homey.__('status.batteryMerged')).catch((error) => this.error(error));
+      // clear its last (junk bdc2) readings from Homey Energy
+      for (const cap of ['measure_power', 'measure_battery']) {
+        if (this.hasCapability(cap)) await this.setCapabilityValue(cap, null).catch((error) => this.error(error));
+      }
+      return;
+    }
     await super.onInit();
+  }
+
+  async onAdded() {
+    if (this.isMergedBattery) return;
+    await super.onAdded();
+  }
+
+  async onSettings(event) {
+    if (this.isMergedBattery) return;
+    await super.onSettings(event);
   }
 
 };
