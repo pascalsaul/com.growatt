@@ -1,0 +1,24 @@
+{
+  "errors": {
+    "permissionDenied": "Toegang geweigerd. Controleer je API-token.",
+    "rateLimited": "Te veel verzoeken. Wacht 5 minuten.",
+    "apiProblem": "API-probleem. Neem contact op met service.nl@growatt.com om je account te laten herstellen.",
+    "userNotFound": "Gebruiker bestaat op geen enkele server.",
+    "httpRequestFailed": "HTTP-verzoek mislukt",
+    "unexpectedResponse": "Onverwacht antwoord van de server",
+    "timeout": "De Growatt-server antwoordde niet op tijd.",
+    "unreachable": "De Growatt-server is niet bereikbaar. Controleer de internetverbinding.",
+    "commandRejected": "De omvormer heeft de opdracht geweigerd. Mogelijk staat afstandsbediening uit op de omvormer, of is een slimme meter vereist.",
+    "commandRejectedOrOffline": "De omvormer heeft de opdracht geweigerd of reageert niet. Mogelijk staat afstandsbediening uit op de omvormer, of is hij offline.",
+    "actionNotSupported": "__action__ wordt niet ondersteund door dit apparaat.",
+    "deviceNotOnAccount": "Dit apparaat staat niet op dat Growatt-account."
+  },
+  "status": {
+    "migrating": "Bezig met migreren. Even geduld...",
+    "noUpdates": "Geen updates van apparaat",
+    "staleData": "Geen nieuwe data sinds __since__. Controleer de verbinding van de datalogger.",
+    "deviceTypeChanged": "Growatt geeft dit apparaat nu als __type__. Repareer het apparaat om het bij te werken.",
+    "deprecatedDevice": "Verouderd testapparaat. Verwijder het en voeg het opnieuw toe.",
+    "batteryMerged": "Samengevoegd met het batterijapparaat van de unit. Verwijder dit apparaat."
+  }
+}

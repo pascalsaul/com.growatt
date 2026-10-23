@@ -2,7 +2,18 @@
   "type": "number",
   "title": {
     "en": "Battery cycles",
-    "nl": "Batterijcycli"
+    "nl": "Batterijcycli",
+    "de": "Batteriezyklen",
+    "fr": "Cycles de batterie",
+    "es": "Ciclos de batería",
+    "it": "Cicli batteria",
+    "da": "Battery cycles",
+    "sv": "Battery cycles",
+    "no": "Battery cycles",
+    "pl": "Battery cycles",
+    "ru": "Battery cycles",
+    "ar": "Battery cycles",
+    "ko": "Battery cycles"
   },
   "getable": true,
   "setable": false,

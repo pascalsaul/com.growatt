@@ -2,7 +2,18 @@
   "type": "number",
   "title": {
     "en": "Charge current limit",
-    "nl": "Laadstroomlimiet"
+    "nl": "Laadstroomlimiet",
+    "de": "Ladestromgrenze",
+    "fr": "Limite courant de charge",
+    "es": "Límite de corriente de carga",
+    "it": "Limite corrente di carica",
+    "da": "Charge current limit",
+    "sv": "Charge current limit",
+    "no": "Charge current limit",
+    "pl": "Charge current limit",
+    "ru": "Charge current limit",
+    "ar": "Charge current limit",
+    "ko": "Charge current limit"
   },
   "getable": true,
   "setable": false,
@@ -10,6 +21,17 @@
   "decimals": 1,
   "units": {
     "en": "A",
-    "nl": "A"
+    "nl": "A",
+    "de": "A",
+    "fr": "A",
+    "es": "A",
+    "it": "A",
+    "da": "A",
+    "sv": "A",
+    "no": "A",
+    "pl": "A",
+    "ru": "A",
+    "ar": "A",
+    "ko": "A"
   }
 }

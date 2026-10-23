@@ -1,0 +1,24 @@
+{
+  "errors": {
+    "permissionDenied": "Åtkomst nekad. Kontrollera din API-token.",
+    "rateLimited": "För många förfrågningar. Vänta 5 minuter.",
+    "apiProblem": "API-problem. Kontakta service.nl@growatt.com för att åtgärda ditt konto.",
+    "userNotFound": "Användaren finns inte på någon server.",
+    "httpRequestFailed": "HTTP-begäran misslyckades",
+    "unexpectedResponse": "Oväntat svar från servern",
+    "timeout": "Growatt-servern svarade inte i tid.",
+    "unreachable": "Growatt-servern kan inte nås. Kontrollera internetanslutningen.",
+    "commandRejected": "Växelriktaren avvisade kommandot. Fjärrstyrning kan vara avstängd på växelriktaren, eller så krävs en smart mätare.",
+    "commandRejectedOrOffline": "Växelriktaren avvisade kommandot eller svarar inte. Fjärrstyrning kan vara avstängd, eller så är den offline.",
+    "actionNotSupported": "__action__ stöds inte av den här enheten.",
+    "deviceNotOnAccount": "Den här enheten finns inte på det Growatt-kontot."
+  },
+  "status": {
+    "migrating": "Migrerar. Vänta...",
+    "noUpdates": "Inga uppdateringar från enheten",
+    "staleData": "Inga nya data sedan __since__. Kontrollera dataloggerns anslutning.",
+    "deviceTypeChanged": "Growatt listar nu den här enheten som __type__. Reparera enheten för att uppdatera den.",
+    "deprecatedDevice": "Föråldrad testenhet. Ta bort den och lägg till den igen.",
+    "batteryMerged": "Sammanslagen med enhetens batterienhet. Ta bort den här enheten."
+  }
+}

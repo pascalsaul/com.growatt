@@ -20,50 +20,38 @@ along with com.growatt.  If not, see <http://www.gnu.org/licenses/>.
 'use strict';
 
 const Device = require('../../lib/common_device');
-const growattMap = require('../../lib/growattMap');
-
-// Additional BMS telemetry exposed by MIX/SPH lastData. Kept here instead of
-// changing the shared map so battery-specific enrichment stays isolated to
-// the battery2 driver. Object.assign is idempotent and runs before the common
-// device migration, so existing Homey devices receive the capabilities
-// dynamically without requiring re-pairing.
-const sphBmsMap = {
-  measure_battery_soh: ['getLastData', (data) => Number(data.bmsSOH)],
-  measure_battery_cycles: ['getLastData', (data) => Number(data.bmsCycleCnt)],
-  measure_voltage_battery: ['getLastData', (data) => Number(data.vbat ?? data.bmsBatteryVolt ?? data.vBatDsp)],
-  measure_current_battery: ['getLastData', (data) => Number(data.bmsBatteryCurr)],
-  measure_temperature_battery: ['getLastData', (data) => Number(data.batteryTemperature)],
-  measure_temperature_bms: ['getLastData', (data) => Number(data.bmsBatteryTemp)],
-  measure_voltage_cell_min: ['getLastData', (data) => Number(data.minSingleCellVolt)],
-  measure_voltage_cell_max: ['getLastData', (data) => Number(data.maxSingleCellVolt)],
-  measure_voltage_cell_delta: ['getLastData', (data) => {
-    const min = Number(data.minSingleCellVolt);
-    const max = Number(data.maxSingleCellVolt);
-    return Number.isFinite(min) && Number.isFinite(max) ? Number((max - min).toFixed(3)) : null;
-  }],
-  measure_temperature_cell_min: ['getLastData', (data) => Number(data.minSingleCellTem)],
-  measure_temperature_cell_max: ['getLastData', (data) => Number(data.maxSingleCellTem)],
-  measure_current_charge_limit: ['getLastData', (data) => Number(data.bmsMaxCurr)],
-  measure_current_discharge_limit: ['getLastData', (data) => Number(data.bmsMaxDischgCurr)],
-  alarm_battery_charge_forbidden: ['getLastData', (data) => Number(data.chargeForbiddenMark ?? 0) === 1],
-  alarm_battery_discharge_forbidden: ['getLastData', (data) => Number(data.dischargeForbiddenMark ?? 0) === 1],
-  alarm_bms_error: ['getLastData', (data) => (
-    Number(data.bmsError ?? 0) !== 0
-    || Number(data.bmsError2 ?? 0) !== 0
-    || Number(data.bmsError3 ?? 0) !== 0
-    || Number(data.bmsProtection ?? 0) !== 0
-    || Number(data.batErrorUnion ?? 0) !== 0
-    || Number(data.faultCode ?? 0) !== 0
-    || Number(data.errorCode ?? 0) !== 0
-    || Number(data.warnCode ?? 0) !== 0
-  )],
-};
+const { hydrateOfficialCapabilities } = require('../../lib/arkxhLegacyAliases');
 
 module.exports = class MyDevice extends Device {
 
+  // a second battery device ('<sn>.bat2', paired before one device per unit) was never a real battery
+  get isMergedBattery() {
+    return String(this.getData().id).endsWith('.bat2');
+  }
+
   async onInit() {
-    if (growattMap.battery2Map?.sph) Object.assign(growattMap.battery2Map.sph, sphBmsMap);
+    if (this.isMergedBattery) {
+      this.restarting = false;
+      this.log(`${this.getName()} is a second battery device; the unit's batteries are one device now`);
+      await this.setUnavailable(this.homey.__('status.batteryMerged')).catch((error) => this.error(error));
+      // clear its last (junk bdc2) readings from Homey Energy
+      for (const cap of ['measure_power', 'measure_battery']) {
+        if (this.hasCapability(cap)) await this.setCapabilityValue(cap, null).catch((error) => this.error(error));
+      }
+      return;
+    }
     await super.onInit();
+    if (!this.restarting && this.deviceType === 'sph') await hydrateOfficialCapabilities(this);
+  }
+
+  async onAdded() {
+    if (this.isMergedBattery) return;
+    await super.onAdded();
+  }
+
+  async onSettings(event) {
+    if (this.isMergedBattery) return;
+    await super.onSettings(event);
   }
 
 };

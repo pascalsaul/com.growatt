@@ -2,7 +2,18 @@
   "type": "number",
   "title": {
     "en": "Battery temperature",
-    "nl": "Batterijtemperatuur"
+    "nl": "Batterijtemperatuur",
+    "de": "Batterietemperatur",
+    "fr": "Température batterie",
+    "es": "Temperatura batería",
+    "it": "Temperatura batteria",
+    "da": "Battery temperature",
+    "sv": "Battery temperature",
+    "no": "Battery temperature",
+    "pl": "Battery temperature",
+    "ru": "Battery temperature",
+    "ar": "Battery temperature",
+    "ko": "Battery temperature"
   },
   "getable": true,
   "setable": false,
@@ -10,6 +21,17 @@
   "decimals": 1,
   "units": {
     "en": "°C",
-    "nl": "°C"
+    "nl": "°C",
+    "de": "°C",
+    "fr": "°C",
+    "es": "°C",
+    "it": "°C",
+    "da": "°C",
+    "sv": "°C",
+    "no": "°C",
+    "pl": "°C",
+    "ru": "°C",
+    "ar": "°C",
+    "ko": "°C"
   }
 }

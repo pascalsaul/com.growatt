@@ -58,6 +58,28 @@ with `GITHUB_TOKEN`; the upstream-sync job therefore performs validation
 5. Validate and install from `custom/ark-xh` on Homey. Do not uninstall the
    app or re-pair battery devices as part of an update.
 
+## Historic SOH and temperature readings
+
+In Growatt 2.6.0, upstream provides standard `measure_soh` (Battery health)
+and `measure_temperature` (Temperature). The older custom ARK-XH fields
+`measure_battery_soh` and `measure_temperature_battery` are retained as
+**retired/hidden aliases**, not removed:
+
+- Their existing Homey Insights histories and Flow references remain tied to
+  their original capability IDs.
+- Their sensor UI components are hidden with `uiComponent: null`.
+- They no longer receive new readings; **only** the standard upstream
+  capabilities record future SOH/temperature data.
+- An empty standard reading may be seeded one time from the previous custom
+  value on SPH device startup, without overwriting an existing standard value.
+- Homey's compact device/preview UI may still mention the retired IDs because
+  the capabilities must remain registered to preserve history. Removing or
+  renaming those IDs is **not** an approved Insights migration.
+
+To make a complete external archive, export both old histories from Homey
+Insights separately before any later attempt to remove these IDs. Do not edit
+Homey's internal database or use `removeCapability` for these fields.
+
 ## Update the local Windows checkout
 
 From a clone of `pascalsaul/com.growatt`:

@@ -2,7 +2,18 @@
   "type": "boolean",
   "title": {
     "en": "Discharge forbidden",
-    "nl": "Ontladen geblokkeerd"
+    "nl": "Ontladen geblokkeerd",
+    "de": "Entladen gesperrt",
+    "fr": "Décharge interdite",
+    "es": "Descarga prohibida",
+    "it": "Scarica vietata",
+    "da": "Discharge forbidden",
+    "sv": "Discharge forbidden",
+    "no": "Discharge forbidden",
+    "pl": "Discharge forbidden",
+    "ru": "Discharge forbidden",
+    "ar": "Discharge forbidden",
+    "ko": "Discharge forbidden"
   },
   "getable": true,
   "setable": false,

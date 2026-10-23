@@ -1,0 +1,24 @@
+{
+  "errors": {
+    "permissionDenied": "Zugriff verweigert. Überprüfen Sie Ihr API-Token.",
+    "rateLimited": "Zu viele Anfragen. Warten Sie 5 Minuten.",
+    "apiProblem": "API-Problem. Bitte kontaktieren Sie service.nl@growatt.com, um Ihr Konto zu korrigieren.",
+    "userNotFound": "Benutzer existiert auf keinem Server.",
+    "httpRequestFailed": "HTTP-Anfrage fehlgeschlagen",
+    "unexpectedResponse": "Unerwartete Antwort vom Server",
+    "timeout": "Der Growatt-Server hat nicht rechtzeitig geantwortet.",
+    "unreachable": "Der Growatt-Server ist nicht erreichbar. Überprüfen Sie die Internetverbindung.",
+    "commandRejected": "Der Wechselrichter hat den Befehl abgelehnt. Möglicherweise ist die Fernsteuerung deaktiviert oder ein Smart Meter erforderlich.",
+    "commandRejectedOrOffline": "Der Wechselrichter hat den Befehl abgelehnt oder antwortet nicht. Möglicherweise ist die Fernsteuerung deaktiviert oder das Gerät ist offline.",
+    "actionNotSupported": "__action__ wird von diesem Gerät nicht unterstützt.",
+    "deviceNotOnAccount": "Dieses Gerät gehört nicht zu diesem Growatt-Konto."
+  },
+  "status": {
+    "migrating": "Migration läuft. Bitte warten...",
+    "noUpdates": "Keine Updates vom Gerät",
+    "staleData": "Keine neuen Daten seit __since__. Prüfen Sie die Verbindung des Datenloggers.",
+    "deviceTypeChanged": "Growatt führt dieses Gerät jetzt als __type__. Reparieren Sie das Gerät, um es zu aktualisieren.",
+    "deprecatedDevice": "Veraltetes Testgerät. Bitte entfernen und neu hinzufügen.",
+    "batteryMerged": "Mit dem Batteriegerät der Einheit zusammengeführt. Bitte entferne dieses Gerät."
+  }
+}

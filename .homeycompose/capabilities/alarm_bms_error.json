@@ -2,7 +2,18 @@
   "type": "boolean",
   "title": {
     "en": "BMS error",
-    "nl": "BMS fout"
+    "nl": "BMS fout",
+    "de": "BMS-Fehler",
+    "fr": "Erreur BMS",
+    "es": "Error BMS",
+    "it": "Errore BMS",
+    "da": "BMS error",
+    "sv": "BMS error",
+    "no": "BMS error",
+    "pl": "BMS error",
+    "ru": "BMS error",
+    "ar": "BMS error",
+    "ko": "BMS error"
   },
   "getable": true,
   "setable": false,
