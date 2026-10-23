@@ -58,27 +58,35 @@ with `GITHUB_TOKEN`; the upstream-sync job therefore performs validation
 5. Validate and install from `custom/ark-xh` on Homey. Do not uninstall the
    app or re-pair battery devices as part of an update.
 
-## Historic SOH and temperature readings
+## SOH and temperature: use upstream capabilities
 
-In Growatt 2.6.0, upstream provides standard `measure_soh` (Battery health)
-and `measure_temperature` (Temperature). The older custom ARK-XH fields
-`measure_battery_soh` and `measure_temperature_battery` are retained as
-**retired/hidden aliases**, not removed:
+Growatt 2.6.0 supplies **`measure_soh`** (Battery health) and
+**`measure_temperature`** (Temperature) for the SPH/MIX battery. The custom
+ARK-XH `measure_battery_soh` and `measure_temperature_battery` capabilities
+were removed from the **battery2** driver and the BMS mapping; all other 14
+custom ARK-XH metrics remain active. The temporary legacy-alias code is removed.
 
-- Their existing Homey Insights histories and Flow references remain tied to
-  their original capability IDs.
-- Their sensor UI components are hidden with `uiComponent: null`.
-- They no longer receive new readings; **only** the standard upstream
-  capabilities record future SOH/temperature data.
-- An empty standard reading may be seeded one time from the previous custom
-  value on SPH device startup, without overwriting an existing standard value.
-- Homey's compact device/preview UI may still mention the retired IDs because
-  the capabilities must remain registered to preserve history. Removing or
-  renaming those IDs is **not** an approved Insights migration.
+**Homey migration requires two installations/releases:**
 
-To make a complete external archive, export both old histories from Homey
-Insights separately before any later attempt to remove these IDs. Do not edit
-Homey's internal database or use `removeCapability` for these fields.
+1. **Migration release (this branch):** leave the two old custom capability
+   **definitions** in `.homeycompose/capabilities` temporarily, despite their
+   absence from the driver and mapping. Homey's normal
+   `DeviceMigrator.migrateCapabilities` then calls `removeCapability`
+   on existing devices. Removing the definitions in the same release can
+   cause Homey to reject capability migration with "Invalid Capability".
+2. **Cleanup release (after the Homey device shows neither old capability):**
+   delete their two JSON definitions and install again. This eliminates
+   them from the application manifest as well.
+
+Removing a capability can delete its historical Insights series and break
+Flows that reference the old capability ID; this is an intentional tradeoff
+in favour of using the standard Growatt 2.6.0 capabilities. Export any
+historical measurements you want to keep *before* installing the migration
+release. The official capabilities have distinct, independent Insights series
+and do not inherit the old history.
+
+Never delete the existing Growatt app or battery device to perform this
+migration.
 
 ## Update the local Windows checkout
 
