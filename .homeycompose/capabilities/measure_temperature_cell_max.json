@@ -2,7 +2,18 @@
   "type": "number",
   "title": {
     "en": "Max cell temperature",
-    "nl": "Max celtemperatuur"
+    "nl": "Max celtemperatuur",
+    "de": "Max. Zelltemperatur",
+    "fr": "Température cellule max.",
+    "es": "Temperatura máxima de celda",
+    "it": "Temperatura max. cella",
+    "da": "Max cell temperature",
+    "sv": "Max cell temperature",
+    "no": "Max cell temperature",
+    "pl": "Max cell temperature",
+    "ru": "Max cell temperature",
+    "ar": "Max cell temperature",
+    "ko": "Max cell temperature"
   },
   "getable": true,
   "setable": false,
@@ -10,6 +21,17 @@
   "decimals": 1,
   "units": {
     "en": "°C",
-    "nl": "°C"
+    "nl": "°C",
+    "de": "°C",
+    "fr": "°C",
+    "es": "°C",
+    "it": "°C",
+    "da": "°C",
+    "sv": "°C",
+    "no": "°C",
+    "pl": "°C",
+    "ru": "°C",
+    "ar": "°C",
+    "ko": "°C"
   }
 }

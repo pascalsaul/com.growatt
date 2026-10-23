@@ -2,7 +2,18 @@
   "type": "boolean",
   "title": {
     "en": "Charge forbidden",
-    "nl": "Laden geblokkeerd"
+    "nl": "Laden geblokkeerd",
+    "de": "Laden gesperrt",
+    "fr": "Charge interdite",
+    "es": "Carga prohibida",
+    "it": "Carica vietata",
+    "da": "Charge forbidden",
+    "sv": "Charge forbidden",
+    "no": "Charge forbidden",
+    "pl": "Charge forbidden",
+    "ru": "Charge forbidden",
+    "ar": "Charge forbidden",
+    "ko": "Charge forbidden"
   },
   "getable": true,
   "setable": false,

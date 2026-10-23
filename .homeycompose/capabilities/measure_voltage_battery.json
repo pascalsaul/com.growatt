@@ -2,7 +2,18 @@
   "type": "number",
   "title": {
     "en": "Battery voltage",
-    "nl": "Batterijspanning"
+    "nl": "Batterijspanning",
+    "de": "Batteriespannung",
+    "fr": "Tension batterie",
+    "es": "Voltaje de batería",
+    "it": "Tensione batteria",
+    "da": "Battery voltage",
+    "sv": "Battery voltage",
+    "no": "Battery voltage",
+    "pl": "Battery voltage",
+    "ru": "Battery voltage",
+    "ar": "Battery voltage",
+    "ko": "Battery voltage"
   },
   "getable": true,
   "setable": false,
@@ -10,6 +21,17 @@
   "decimals": 1,
   "units": {
     "en": "V",
-    "nl": "V"
+    "nl": "V",
+    "de": "V",
+    "fr": "V",
+    "es": "V",
+    "it": "V",
+    "da": "V",
+    "sv": "V",
+    "no": "V",
+    "pl": "V",
+    "ru": "V",
+    "ar": "V",
+    "ko": "V"
   }
 }

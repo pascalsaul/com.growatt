@@ -2,7 +2,18 @@
   "type": "number",
   "title": {
     "en": "Discharge current limit",
-    "nl": "Ontlaadstroomlimiet"
+    "nl": "Ontlaadstroomlimiet",
+    "de": "Entladestromgrenze",
+    "fr": "Limite courant de décharge",
+    "es": "Límite de corriente de descarga",
+    "it": "Limite corrente di scarica",
+    "da": "Discharge current limit",
+    "sv": "Discharge current limit",
+    "no": "Discharge current limit",
+    "pl": "Discharge current limit",
+    "ru": "Discharge current limit",
+    "ar": "Discharge current limit",
+    "ko": "Discharge current limit"
   },
   "getable": true,
   "setable": false,
@@ -10,6 +21,17 @@
   "decimals": 1,
   "units": {
     "en": "A",
-    "nl": "A"
+    "nl": "A",
+    "de": "A",
+    "fr": "A",
+    "es": "A",
+    "it": "A",
+    "da": "A",
+    "sv": "A",
+    "no": "A",
+    "pl": "A",
+    "ru": "A",
+    "ar": "A",
+    "ko": "A"
   }
 }

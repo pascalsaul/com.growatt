@@ -2,7 +2,18 @@
   "type": "number",
   "title": {
     "en": "Cell voltage delta",
-    "nl": "Celspanningsverschil"
+    "nl": "Celspanningsverschil",
+    "de": "Zellspannungsdifferenz",
+    "fr": "Écart tension cellules",
+    "es": "Diferencia de voltaje de celdas",
+    "it": "Differenza tensione celle",
+    "da": "Cell voltage delta",
+    "sv": "Cell voltage delta",
+    "no": "Cell voltage delta",
+    "pl": "Cell voltage delta",
+    "ru": "Cell voltage delta",
+    "ar": "Cell voltage delta",
+    "ko": "Cell voltage delta"
   },
   "getable": true,
   "setable": false,
@@ -10,6 +21,17 @@
   "decimals": 3,
   "units": {
     "en": "V",
-    "nl": "V"
+    "nl": "V",
+    "de": "V",
+    "fr": "V",
+    "es": "V",
+    "it": "V",
+    "da": "V",
+    "sv": "V",
+    "no": "V",
+    "pl": "V",
+    "ru": "V",
+    "ar": "V",
+    "ko": "V"
   }
 }

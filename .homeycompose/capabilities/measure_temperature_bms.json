@@ -2,7 +2,18 @@
   "type": "number",
   "title": {
     "en": "BMS temperature",
-    "nl": "BMS temperatuur"
+    "nl": "BMS temperatuur",
+    "de": "BMS-Temperatur",
+    "fr": "Température BMS",
+    "es": "Temperatura BMS",
+    "it": "Temperatura BMS",
+    "da": "BMS temperature",
+    "sv": "BMS temperature",
+    "no": "BMS temperature",
+    "pl": "BMS temperature",
+    "ru": "BMS temperature",
+    "ar": "BMS temperature",
+    "ko": "BMS temperature"
   },
   "getable": true,
   "setable": false,
@@ -10,6 +21,17 @@
   "decimals": 1,
   "units": {
     "en": "°C",
-    "nl": "°C"
+    "nl": "°C",
+    "de": "°C",
+    "fr": "°C",
+    "es": "°C",
+    "it": "°C",
+    "da": "°C",
+    "sv": "°C",
+    "no": "°C",
+    "pl": "°C",
+    "ru": "°C",
+    "ar": "°C",
+    "ko": "°C"
   }
 }

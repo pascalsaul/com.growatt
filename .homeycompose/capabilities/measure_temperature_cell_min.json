@@ -2,7 +2,18 @@
   "type": "number",
   "title": {
     "en": "Min cell temperature",
-    "nl": "Min celtemperatuur"
+    "nl": "Min celtemperatuur",
+    "de": "Min. Zelltemperatur",
+    "fr": "Température cellule min.",
+    "es": "Temperatura mínima de celda",
+    "it": "Temperatura min. cella",
+    "da": "Min cell temperature",
+    "sv": "Min cell temperature",
+    "no": "Min cell temperature",
+    "pl": "Min cell temperature",
+    "ru": "Min cell temperature",
+    "ar": "Min cell temperature",
+    "ko": "Min cell temperature"
   },
   "getable": true,
   "setable": false,
@@ -10,6 +21,17 @@
   "decimals": 1,
   "units": {
     "en": "°C",
-    "nl": "°C"
+    "nl": "°C",
+    "de": "°C",
+    "fr": "°C",
+    "es": "°C",
+    "it": "°C",
+    "da": "°C",
+    "sv": "°C",
+    "no": "°C",
+    "pl": "°C",
+    "ru": "°C",
+    "ar": "°C",
+    "ko": "°C"
   }
 }
