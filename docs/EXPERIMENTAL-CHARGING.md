@@ -2,7 +2,7 @@
 
 **Prototype / hardware not verified. Do not use unattended or install over your production Homey without a backup.**
 
-The feature branch `feature/arkxh-charge-to-soc` adds two Flow actions:
+The tested feature branch [`feature/arkxh-charge-to-soc-verified`](https://github.com/pascalsaul/com.growatt/tree/feature/arkxh-charge-to-soc-verified) (Draft PR #6) adds two Flow actions:
 
 - **EXPERIMENTAL: Charge battery until target SOC** — target SOC (20–100%), charge power (W) and a finite safety timeout (5–240 minutes)
 - **EXPERIMENTAL: Stop battery charging**

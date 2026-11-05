@@ -84,7 +84,24 @@ module.exports = class MyDevice extends Device {
 
   async onSettings(event) {
     if (this.isMergedBattery) return;
+    // Disabling the experimental option must attempt a stop BEFORE the
+    // upstream settings handler restarts the device and its listeners.
+    if (event.changedKeys?.includes('arkxhExperimentalVppCharge')
+        && event.newSettings.arkxhExperimentalVppCharge === false
+        && this.arkxhCharge) {
+      await this.arkxhCharge.stop();
+    }
     await super.onSettings(event);
+  }
+
+  async onDeleted() {
+    if (this.arkxhCharge?.session) {
+      await this.arkxhCharge.stop().catch((error) => {
+        this.error('ARK-XH remote charge could not be stopped on device removal; check inverter controls manually', error);
+      });
+    }
+    this.arkxhCharge?.close();
+    await super.onDeleted();
   }
 
 };
