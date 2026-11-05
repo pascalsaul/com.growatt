@@ -54,7 +54,8 @@ module.exports = class MyDevice extends Device {
     if (!this.arkxhCharge || !this.getAvailable()) return;
     // Only use actual battery readings from the relevant lastData response.
     // BMS flags are read from mapped Homey capabilities after upstream updates.
-    const soc = Number(data.soc);
+    const soc = data.soc === undefined || data.soc === null || data.soc === ''
+      ? NaN : Number(data.soc);
     const errorFields = ['bmsError', 'bmsError2', 'bmsError3', 'bmsProtection', 'batErrorUnion', 'faultCode', 'errorCode', 'warnCode'];
     await this.arkxhCharge.observed(soc, {
       blocked: Number(data.chargeForbiddenMark ?? 0) === 1,
