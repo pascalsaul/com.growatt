@@ -20,6 +20,8 @@ along with com.growatt.  If not, see <http://www.gnu.org/licenses/>.
 'use strict';
 
 const Device = require('../../lib/common_device');
+const { ChargeController } = require('../../lib/arkxhChargeController');
+const { ExperimentalVppBackend } = require('../../lib/arkxhExperimentalVpp');
 
 module.exports = class MyDevice extends Device {
 
@@ -40,6 +42,38 @@ module.exports = class MyDevice extends Device {
       return;
     }
     await super.onInit();
+    if (!this.restarting) {
+      this.arkxhCharge?.close();
+      this.arkxhCharge = new ChargeController(this, new ExperimentalVppBackend(this));
+      await this.arkxhCharge.init();
+    }
+  }
+
+  async handleLastData(data) {
+    await super.handleLastData(data);
+    if (!this.arkxhCharge || !this.getAvailable()) return;
+    // Only use actual battery readings from the relevant lastData response.
+    // BMS flags are read from mapped Homey capabilities after upstream updates.
+    const soc = Number(data.soc);
+    await this.arkxhCharge.observed(soc, {
+      blocked: this.getCapabilityValue('alarm_battery_charge_forbidden') === true,
+      bmsAlarm: this.getCapabilityValue('alarm_bms_error') === true,
+    });
+  }
+
+  async startArkxhCharge(request) {
+    if (!this.arkxhCharge) throw Error('ARK-XH charge controller has not initialized.');
+    return this.arkxhCharge.start(request);
+  }
+
+  async stopArkxhCharge() {
+    if (!this.arkxhCharge) throw Error('ARK-XH charge controller has not initialized.');
+    return this.arkxhCharge.stop();
+  }
+
+  async onUninit() {
+    this.arkxhCharge?.close();
+    await super.onUninit();
   }
 
   async onAdded() {
