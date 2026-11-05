@@ -1,0 +1,54 @@
+{
+  "title": {
+    "en": "EXPERIMENTAL: Stop battery charging",
+    "nl": "EXPERIMENTEEL: Stop batterij laden",
+    "da": "EXPERIMENTAL: Stop battery charging",
+    "de": "EXPERIMENTAL: Stop battery charging",
+    "es": "EXPERIMENTAL: Stop battery charging",
+    "fr": "EXPERIMENTAL: Stop battery charging",
+    "it": "EXPERIMENTAL: Stop battery charging",
+    "no": "EXPERIMENTAL: Stop battery charging",
+    "sv": "EXPERIMENTAL: Stop battery charging",
+    "pl": "EXPERIMENTAL: Stop battery charging",
+    "ru": "EXPERIMENTAL: Stop battery charging",
+    "ko": "EXPERIMENTAL: Stop battery charging",
+    "ar": "EXPERIMENTAL: Stop battery charging"
+  },
+  "hint": {
+    "en": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "nl": "Experimenteel: onbevestigde SPH VPP-aansturing. Standaard uitgeschakeld. Niet onbeheerd gebruiken voordat netladen en stoppen getest zijn.",
+    "da": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "de": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "es": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "fr": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "it": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "no": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "sv": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "pl": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "ru": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "ko": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "ar": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=battery2",
+      "title": {
+        "en": "Battery",
+        "nl": "Batterij",
+        "da": "Battery",
+        "de": "Battery",
+        "es": "Battery",
+        "fr": "Battery",
+        "it": "Battery",
+        "no": "Battery",
+        "sv": "Battery",
+        "pl": "Battery",
+        "ru": "Battery",
+        "ko": "Battery",
+        "ar": "Battery"
+      }
+    }
+  ]
+}

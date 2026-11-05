@@ -20,6 +20,8 @@ along with com.growatt.  If not, see <http://www.gnu.org/licenses/>.
 'use strict';
 
 const Device = require('../../lib/common_device');
+const { ChargeController } = require('../../lib/arkxhChargeController');
+const { ExperimentalVppBackend } = require('../../lib/arkxhExperimentalVpp');
 
 module.exports = class MyDevice extends Device {
 
@@ -40,6 +42,40 @@ module.exports = class MyDevice extends Device {
       return;
     }
     await super.onInit();
+    if (!this.restarting) {
+      this.arkxhCharge?.close();
+      this.arkxhCharge = new ChargeController(this, new ExperimentalVppBackend(this));
+      await this.arkxhCharge.init();
+    }
+  }
+
+  async handleLastData(data) {
+    await super.handleLastData(data);
+    if (!this.arkxhCharge || !this.getAvailable()) return;
+    // Only use actual battery readings from the relevant lastData response.
+    // BMS flags are read from mapped Homey capabilities after upstream updates.
+    const soc = data.soc === undefined || data.soc === null || data.soc === ''
+      ? NaN : Number(data.soc);
+    const errorFields = ['bmsError', 'bmsError2', 'bmsError3', 'bmsProtection', 'batErrorUnion', 'faultCode', 'errorCode', 'warnCode'];
+    await this.arkxhCharge.observed(soc, {
+      blocked: Number(data.chargeForbiddenMark ?? 0) === 1,
+      bmsAlarm: errorFields.some((field) => Number(data[field] ?? 0) !== 0),
+    });
+  }
+
+  async startArkxhCharge(request) {
+    if (!this.arkxhCharge) throw Error('ARK-XH charge controller has not initialized.');
+    return this.arkxhCharge.start(request);
+  }
+
+  async stopArkxhCharge() {
+    if (!this.arkxhCharge) throw Error('ARK-XH charge controller has not initialized.');
+    return this.arkxhCharge.stop();
+  }
+
+  async onUninit() {
+    this.arkxhCharge?.close();
+    await super.onUninit();
   }
 
   async onAdded() {
@@ -49,7 +85,24 @@ module.exports = class MyDevice extends Device {
 
   async onSettings(event) {
     if (this.isMergedBattery) return;
+    // Disabling the experimental option must attempt a stop BEFORE the
+    // upstream settings handler restarts the device and its listeners.
+    if (event.changedKeys?.includes('arkxhExperimentalVppCharge')
+        && event.newSettings.arkxhExperimentalVppCharge === false
+        && this.arkxhCharge) {
+      await this.arkxhCharge.stop();
+    }
     await super.onSettings(event);
+  }
+
+  async onDeleted() {
+    if (this.arkxhCharge?.session) {
+      await this.arkxhCharge.stop().catch((error) => {
+        this.error('ARK-XH remote charge could not be stopped on device removal; check inverter controls manually', error);
+      });
+    }
+    this.arkxhCharge?.close();
+    await super.onDeleted();
   }
 
 };

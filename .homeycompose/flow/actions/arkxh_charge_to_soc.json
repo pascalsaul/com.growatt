@@ -1,0 +1,117 @@
+{
+  "title": {
+    "en": "EXPERIMENTAL: Charge battery until target SOC",
+    "nl": "EXPERIMENTEEL: Laad batterij tot doel-SOC",
+    "da": "EXPERIMENTAL: Charge battery until target SOC",
+    "de": "EXPERIMENTAL: Charge battery until target SOC",
+    "es": "EXPERIMENTAL: Charge battery until target SOC",
+    "fr": "EXPERIMENTAL: Charge battery until target SOC",
+    "it": "EXPERIMENTAL: Charge battery until target SOC",
+    "no": "EXPERIMENTAL: Charge battery until target SOC",
+    "sv": "EXPERIMENTAL: Charge battery until target SOC",
+    "pl": "EXPERIMENTAL: Charge battery until target SOC",
+    "ru": "EXPERIMENTAL: Charge battery until target SOC",
+    "ko": "EXPERIMENTAL: Charge battery until target SOC",
+    "ar": "EXPERIMENTAL: Charge battery until target SOC"
+  },
+  "hint": {
+    "en": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "nl": "Experimenteel: onbevestigde SPH VPP-aansturing. Standaard uitgeschakeld. Niet onbeheerd gebruiken voordat netladen en stoppen getest zijn.",
+    "da": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "de": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "es": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "fr": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "it": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "no": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "sv": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "pl": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "ru": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "ko": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter.",
+    "ar": "Experimental: unverified SPH VPP path. Disabled by default; do not use unattended until AC-grid charging and stop behavior have been verified on the inverter."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=battery2",
+      "title": {
+        "en": "Battery",
+        "nl": "Batterij",
+        "da": "Battery",
+        "de": "Battery",
+        "es": "Battery",
+        "fr": "Battery",
+        "it": "Battery",
+        "no": "Battery",
+        "sv": "Battery",
+        "pl": "Battery",
+        "ru": "Battery",
+        "ko": "Battery",
+        "ar": "Battery"
+      }
+    },
+    {
+      "type": "number",
+      "name": "target_soc",
+      "title": {
+        "en": "Target state of charge (%)",
+        "nl": "Gewenst laadpercentage (%)",
+        "da": "Target state of charge (%)",
+        "de": "Target state of charge (%)",
+        "es": "Target state of charge (%)",
+        "fr": "Target state of charge (%)",
+        "it": "Target state of charge (%)",
+        "no": "Target state of charge (%)",
+        "sv": "Target state of charge (%)",
+        "pl": "Target state of charge (%)",
+        "ru": "Target state of charge (%)",
+        "ko": "Target state of charge (%)",
+        "ar": "Target state of charge (%)"
+      },
+      "min": 20,
+      "max": 100
+    },
+    {
+      "type": "number",
+      "name": "power_watts",
+      "title": {
+        "en": "Maximum charging power (W)",
+        "nl": "Maximaal laadvermogen (W)",
+        "da": "Maximum charging power (W)",
+        "de": "Maximum charging power (W)",
+        "es": "Maximum charging power (W)",
+        "fr": "Maximum charging power (W)",
+        "it": "Maximum charging power (W)",
+        "no": "Maximum charging power (W)",
+        "sv": "Maximum charging power (W)",
+        "pl": "Maximum charging power (W)",
+        "ru": "Maximum charging power (W)",
+        "ko": "Maximum charging power (W)",
+        "ar": "Maximum charging power (W)"
+      },
+      "min": 250,
+      "max": 15000
+    },
+    {
+      "type": "number",
+      "name": "max_minutes",
+      "title": {
+        "en": "Safety timeout (minutes)",
+        "nl": "Veiligheidstimer (minuten)",
+        "da": "Safety timeout (minutes)",
+        "de": "Safety timeout (minutes)",
+        "es": "Safety timeout (minutes)",
+        "fr": "Safety timeout (minutes)",
+        "it": "Safety timeout (minutes)",
+        "no": "Safety timeout (minutes)",
+        "sv": "Safety timeout (minutes)",
+        "pl": "Safety timeout (minutes)",
+        "ru": "Safety timeout (minutes)",
+        "ko": "Safety timeout (minutes)",
+        "ar": "Safety timeout (minutes)"
+      },
+      "min": 5,
+      "max": 240
+    }
+  ]
+}

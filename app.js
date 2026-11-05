@@ -288,6 +288,17 @@ module.exports = class MyApp extends Homey.App {
 
             return;
           }
+          // ARK-XH experimental charge control is intentionally handled outside
+          // the upstream capability maps; no tariff logic or battery writable
+          // capability is added to the maintained Growatt app.
+          if (action.id === 'arkxh_charge_to_soc') {
+            return args.device.startArkxhCharge({
+              targetSoc: args.target_soc,
+              powerWatts: args.power_watts,
+              maxMinutes: args.max_minutes,
+            });
+          }
+          if (action.id === 'arkxh_stop_charge') return args.device.stopArkxhCharge();
           args.device.log(`Flow action ${action.id} called with value ${args.val}`);
           await args.device.handleFlowAction({ action: action.id, val: args.val });
         } catch (error) {
