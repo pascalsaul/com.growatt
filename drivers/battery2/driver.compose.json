@@ -84,8 +84,7 @@
     "meterPowerExportedCapability": "meter_power.discharged"
   },
   "platforms": [
-    "local",
-    "cloud"
+    "local"
   ],
   "connectivity": [
     "cloud"

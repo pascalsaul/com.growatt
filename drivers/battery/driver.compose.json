@@ -47,8 +47,7 @@
     "homeBattery": true
   },
   "platforms": [
-    "local",
-    "cloud"
+    "local"
   ],
   "connectivity": [
     "cloud"
