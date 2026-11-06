@@ -1,0 +1,66 @@
+name: Growatt Advanced → Athom Draft (opt-in)
+
+# Exact Orcon release pattern, but intentionally DISABLED by default.
+# Enable after moving to the independent repository and legal review.
+on:
+  push:
+    branches: [product/growatt-advanced]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: growatt-advanced-athom-draft
+  cancel-in-progress: false
+
+jobs:
+  upload:
+    if: ${{ vars.GROWATT_ADVANCED_DRAFT_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment: homey-draft
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Check independent app and release metadata
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          const app = JSON.parse(fs.readFileSync('.homeycompose/app.json', 'utf8'));
+          const generated = JSON.parse(fs.readFileSync('app.json', 'utf8'));
+          const changelog = JSON.parse(fs.readFileSync('.homeychangelog.json', 'utf8'));
+          const id = 'nl.community.growattadvanced';
+          if (pkg.name !== id || app.id !== id || generated.id !== id) {
+            throw new Error('Not the independent Growatt Advanced app');
+          }
+          if (pkg.version !== app.version || pkg.version !== generated.version
+              || !changelog[pkg.version]?.en || !changelog[pkg.version]?.nl) {
+            throw new Error('Inconsistent release version or missing changelog entry');
+          }
+          if (!fs.readFileSync('README.txt', 'utf8').trim()
+              || !fs.readFileSync('README.nl.txt', 'utf8').trim()) {
+            throw new Error('Missing Homey App Store descriptions');
+          }
+          NODE
+      - run: npm ci
+      - run: npm test
+      - name: Homey publish validation
+        uses: athombv/github-action-homey-app-validate@master
+        with:
+          level: publish
+      - name: Upload to Athom Draft (never automatic Test or Live)
+        id: publish
+        uses: athombv/github-action-homey-app-publish@master
+        with:
+          personal_access_token: ${{ secrets.HOMEY_PAT }}
+      - name: Draft management link
+        env:
+          DRAFT_URL: ${{ steps.publish.outputs.url }}
+        run: echo "Growatt Advanced Draft is available at $DRAFT_URL" >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,30 @@
+name: Growatt Advanced CI
+
+on:
+  push:
+    branches: [product/growatt-advanced]
+  pull_request:
+    branches: [product/growatt-advanced]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Homey CLI
+        run: npm install --global homey
+      - name: Homey publish validation
+        run: homey app validate --level publish
+      - name: Unit tests
+        run: npm test

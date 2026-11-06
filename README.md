@@ -1,48 +1,40 @@
-# Growatt Homey — ARK-XH BMS telemetry add-on
+# Growatt Advanced — independent Homey Pro integration
 
-**Community-maintained fork of [gruijter/com.growatt](https://github.com/gruijter/com.growatt), with 14 additional BMS capabilities for compatible Growatt SPH/MIX + ARK-XH battery installations.**
+**Status: development preview, not published.**
 
-This fork keeps the original Homey app ID (`com.growatt`) and the upstream app functionality. It adds **read-only battery diagnostics** from the Growatt `getLastData` response to the `battery2` device. The extra capabilities support Homey Insights and are not used to control the battery.
+A standalone community Homey integration for Growatt inverters, meters and battery systems. First verified focus: **SPH/MIX + ARK-XH** with extended **14 read-only BMS metrics**. Architecture retains Growatt model families for future validation.
 
-> **Install from [`custom/ark-xh`](https://github.com/pascalsaul/com.growatt/tree/custom/ark-xh), NOT the default `main` branch.** The default branch is used for the automated synchronization workflow and is not the deployable ARK-XH variant.
+- Permanent proposed Homey app ID: `nl.community.growattadvanced`
+- Preview version: `0.1.0`
+- Platforms: **Homey Pro (local)**; no Homey Cloud release in this stage
+- Initial functionality: SPH/MIX inverter, battery, meter readings, additional BMS telemetry, read-only AC-charge settings diagnostic
+- Future functionality (not ready): AC grid charging to target SOC via verified SPH-specific API, safe stop/restore and Homey/EMS interoperability
+- Explicitly **not** an energy pricing / optimization engine: Homey Flows or Ultimate EMS may choose *when* to charge
 
-## Start here
+## Independence and compatibility
 
-- **[Installation and upgrades](docs/INSTALLATION.md)** — Windows PowerShell instructions, Homey CLI, upgrading without removing devices, and rollback considerations.
-- **[All 14 BMS capabilities](docs/BMS-CAPABILITIES.md)** — names, units, Growatt API fields, and interpretation notes.
-- **[Troubleshooting](docs/TROUBLESHOOTING.md)** — missing readings, app version, connectivity alarms, Insights and migration issues.
-- **[Nederlandse snelstart](docs/INSTALLATIE-NL.md)** — de belangrijkste installatie- en updatecommando's.
-- **[Maintainer guide](docs/ARK-XH-MAINTENANCE.md)** — branch strategy, automated upstream sync and update reviews.
+This application has **its own Homey app ID** and can be installed alongside the existing `com.growatt` app. It does **not** overwrite that app, Robin's Test releases, existing devices or Insights. Historic Homey Insights are tied to the original devices and will **not be migrated** by this application.
 
-## What this fork adds
+**Do not pair the same inverter, battery or meter into both apps without reviewing energy accounting.** If doing a side-by-side trial, set **Exclude from Energy** on the new duplicate devices before using Homey Energy. Two separate apps querying the same Growatt API account can also add to API load and rate limiting. Prefer a short supervised test and avoid concurrent high-frequency polling.
 
-| Group | Additional measurements |
-| --- | --- |
-| Battery state | Cycle count, battery voltage, battery current |
-| Battery management | BMS temperature, charge current limit, discharge current limit |
-| Cell health | Minimum and maximum cell voltage, voltage difference, minimum and maximum cell temperature |
-| BMS alarms | Charging forbidden, discharging forbidden, aggregate BMS error/warning flag |
+## Distribution
 
-That is **14 custom capabilities**: 11 numerical readings and 3 boolean alarms.
+The `product/growatt-advanced` branch is a temporary staging location in the existing GitHub fork. Our long-term target is a separate repository `pascalsaul/homey-growatt-advanced` with an independent **CI → Athom Draft → Test** release pipeline like the Orcon HRC Multizone project. A Homey Developer Personal Access Token must be configured as the `HOMEY_PAT` GitHub Actions secret in the destination repository. No token is committed to source control.
 
-**Battery health (SOH)**, **battery temperature**, and **connectivity alarm** are already part of the upstream Growatt 2.6.0 app and are deliberately **not duplicated** here. The original custom SOH and battery-temperature capabilities were removed as part of a staged migration.
+**Do not enable automatic Draft publishing** until the new app passes review for Athom's copycat guidelines and original-author attribution. This fork is GPL-3.0-or-later (original: [R.M. de Gruijter](https://github.com/gruijter/com.growatt)), but Athom independently asks for permission and clear differentiation before approving similar community apps.
 
-## Compatibility and limitations
+## Development and validation
 
-- Developed and tested with a **Growatt SPH/MIX-type installation with an ARK-XH high-voltage battery stack**, through the cloud-backed `battery2` driver (`sph` mapping).
-- Other Growatt models, battery generations, firmware revisions and API accounts may return different field sets. Additional compatibility is **not** claimed without testing.
-- The battery and inverter must already be accessible through the normal Growatt Homey pairing/API flow.
-- This is a **developer-installed, unofficial fork**, not a separate app in the Homey App Store. Do not install it alongside the original app as if it had a different app ID: both use `com.growatt`.
-- Each change in upstream code is proposed for review and validation before inclusion. Installing a development build does not automatically deploy future commits to your Homey.
+```sh
+npm ci
+npx homey app validate
+npm test
+```
 
-## Development and upstream
+Do not install the `custom/ark-xh` branch for this new app ID; `custom/ark-xh` remains the existing operational fork and does not change.
 
-- Upstream: [gruijter/com.growatt](https://github.com/gruijter/com.growatt).
-- Original contribution: [upstream ARK-XH BMS PR #23](https://github.com/gruijter/com.growatt/pull/23).
-- Stable fork code: [`custom/ark-xh`](https://github.com/pascalsaul/com.growatt/tree/custom/ark-xh).
-- Underlying telemetry mapping: [`lib/arkxhBmsMap.js`](lib/arkxhBmsMap.js).
-- App license: see [LICENSE](LICENSE); upstream copyright and credit remain in place.
+## Sources and license
 
-For support, [open an issue on this fork](https://github.com/pascalsaul/com.growatt/issues) for ARK-XH-specific problems. Please **remove serial numbers, location information, API tokens and credentials** from logs and screenshots before publishing them.
+Based on [gruijter/com.growatt](https://github.com/gruijter/com.growatt), GPL-3.0-or-later. Original authorship and copyright comments remain in source. See `LICENSE` and [BMS implementation](docs/BMS-CAPABILITIES.md).
 
-_This community fork is not affiliated with Growatt, Athom, or the upstream maintainer._
+See [architecture and release gates](docs/GROWATT-ADVANCED.md) and [read-only charge-setting diagnostics](docs/READ-CHARGE-SETTINGS.md).

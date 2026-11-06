@@ -17,8 +17,10 @@ const V2 = ['inverter2', 'battery2', 'meter2'];
 
 // Remove an entry only together with the migration step that removes it from existing devices.
 const PINNED = {
-  appId: 'com.growatt',
-  customCapabilities: ['charge_setpoint', 'measure_efficiency', 'measure_soh'],
+  appId: 'nl.community.growattadvanced',
+  customCapabilities: ['charge_setpoint', 'measure_efficiency', 'measure_soh',
+    'measure_battery_cycles', 'measure_voltage_battery', 'measure_current_battery', 'measure_temperature_bms', 'measure_voltage_cell_min', 'measure_voltage_cell_max', 'measure_voltage_cell_delta', 'measure_temperature_cell_min', 'measure_temperature_cell_max', 'measure_current_charge_limit', 'measure_current_discharge_limit', 'alarm_battery_charge_forbidden', 'alarm_battery_discharge_forbidden', 'alarm_bms_error',
+  ],
   drivers: {
     inverter: ['username', 'password'],
     battery: ['username', 'password'],

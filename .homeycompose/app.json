@@ -1,30 +1,29 @@
 {
-  "id": "com.growatt",
-  "version": "2.6.0",
+  "id": "nl.community.growattadvanced",
+  "version": "0.1.0",
   "compatibility": ">=12.13.0",
   "sdk": 3,
   "platforms": [
-    "local",
-    "cloud"
+    "local"
   ],
   "name": {
-    "en": "Growatt",
-    "nl": "Growatt",
-    "da": "Growatt",
-    "de": "Growatt",
-    "es": "Growatt",
-    "fr": "Growatt",
-    "it": "Growatt",
-    "no": "Growatt",
-    "sv": "Growatt",
-    "pl": "Growatt",
-    "ru": "Growatt",
-    "ko": "Growatt",
-    "ar": "Growatt"
+    "en": "Growatt Advanced",
+    "nl": "Growatt Advanced",
+    "da": "Growatt Advanced",
+    "de": "Growatt Advanced",
+    "es": "Growatt Advanced",
+    "fr": "Growatt Advanced",
+    "it": "Growatt Advanced",
+    "no": "Growatt Advanced",
+    "sv": "Growatt Advanced",
+    "pl": "Growatt Advanced",
+    "ru": "Growatt Advanced",
+    "ko": "Growatt Advanced",
+    "ar": "Growatt Advanced"
   },
   "description": {
-    "en": "Smart energy for a green future.",
-    "nl": "Slimme energie voor een groene toekomst.",
+    "en": "Independent Growatt solar and battery monitoring for Homey Pro, including detailed SPH/MIX BMS diagnostics. Battery charging control is under development.",
+    "nl": "Onafhankelijke Growatt-integratie voor Homey Pro: zonnepanelen, omvormer en batterij met uitgebreide SPH/MIX BMS-diagnostiek. Batterijbesturing is in ontwikkeling.",
     "da": "Smart energi til en grøn fremtid.",
     "de": "Intelligente Energie für eine grüne Zukunft.",
     "es": "Energía inteligente para un futuro verde.",
@@ -153,10 +152,9 @@
     "xlarge": "/assets/images/xlarge.png"
   },
   "author": {
-    "name": "R.M. de Gruijter"
+    "name": "pascalsaul"
   },
-  "copyright": "R.M. de Gruijter (rmdegruijter@gmail.com)",
+  "copyright": "Original Growatt Homey integration © R.M. de Gruijter; modifications © Growatt Advanced community contributors",
   "license": "GPL-3.0-or-later",
-  "homeyCommunityTopicId": 134233,
-  "support": "https://github.com/gruijter/com.growatt/issues"
+  "support": "https://github.com/pascalsaul/com.growatt/issues"
 }
