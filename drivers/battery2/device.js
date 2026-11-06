@@ -20,6 +20,7 @@ along with com.growatt.  If not, see <http://www.gnu.org/licenses/>.
 'use strict';
 
 const Device = require('../../lib/common_device');
+const { summarizeSphChargeSettings } = require('../../lib/arkxhReadChargeSettings');
 
 module.exports = class MyDevice extends Device {
 
@@ -40,6 +41,19 @@ module.exports = class MyDevice extends Device {
       return;
     }
     await super.onInit();
+  }
+
+  // Explicit read-only diagnostics: no mode changes, no charge/discharge
+  // commands, no serial numbers or API tokens in the generated report.
+  async readArkxhChargeSettings() {
+    if (this.isMergedBattery || this.deviceType !== 'sph') {
+      throw Error('Read-only charge settings are available for SPH/MIX battery devices only');
+    }
+    if (!this.growatt) throw Error('Growatt API session not initialized');
+    const data = await this.growatt.getSphChargeSettings({ deviceSn: this.deviceSn });
+    const report = summarizeSphChargeSettings(data);
+    this.log('ARK-XH read-only charge settings:', JSON.stringify(report));
+    return report;
   }
 
   async onAdded() {

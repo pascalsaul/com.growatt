@@ -1,0 +1,75 @@
+{
+  "title": {
+    "en": "Read SPH/MIX charge settings (read-only)",
+    "nl": "Lees SPH/MIX-laadinstellingen uit (alleen lezen)",
+    "da": "Read SPH/MIX charge settings (read-only)",
+    "de": "Read SPH/MIX charge settings (read-only)",
+    "es": "Read SPH/MIX charge settings (read-only)",
+    "fr": "Read SPH/MIX charge settings (read-only)",
+    "it": "Read SPH/MIX charge settings (read-only)",
+    "no": "Read SPH/MIX charge settings (read-only)",
+    "sv": "Read SPH/MIX charge settings (read-only)",
+    "pl": "Read SPH/MIX charge settings (read-only)",
+    "ru": "Read SPH/MIX charge settings (read-only)",
+    "ko": "Read SPH/MIX charge settings (read-only)",
+    "ar": "Read SPH/MIX charge settings (read-only)"
+  },
+  "hint": {
+    "en": "Retrieves existing grid charging settings, target SOC, charge power and schedules. No inverter settings are changed. Returns a redacted text token in Advanced Flow and writes the same safe summary to app diagnostics.",
+    "nl": "Leest bestaande instellingen voor netladen, doel-SOC, laadvermogen en tijdschema's uit. Wijzigt niets aan de omvormer. Retourneert een geanonimiseerd teksttoken in Advanced Flow en schrijft dezelfde samenvatting in de app-log.",
+    "da": "Retrieves existing grid charging settings, target SOC, charge power and schedules. No inverter settings are changed. Returns a redacted text token in Advanced Flow and writes the same safe summary to app diagnostics.",
+    "de": "Retrieves existing grid charging settings, target SOC, charge power and schedules. No inverter settings are changed. Returns a redacted text token in Advanced Flow and writes the same safe summary to app diagnostics.",
+    "es": "Retrieves existing grid charging settings, target SOC, charge power and schedules. No inverter settings are changed. Returns a redacted text token in Advanced Flow and writes the same safe summary to app diagnostics.",
+    "fr": "Retrieves existing grid charging settings, target SOC, charge power and schedules. No inverter settings are changed. Returns a redacted text token in Advanced Flow and writes the same safe summary to app diagnostics.",
+    "it": "Retrieves existing grid charging settings, target SOC, charge power and schedules. No inverter settings are changed. Returns a redacted text token in Advanced Flow and writes the same safe summary to app diagnostics.",
+    "no": "Retrieves existing grid charging settings, target SOC, charge power and schedules. No inverter settings are changed. Returns a redacted text token in Advanced Flow and writes the same safe summary to app diagnostics.",
+    "sv": "Retrieves existing grid charging settings, target SOC, charge power and schedules. No inverter settings are changed. Returns a redacted text token in Advanced Flow and writes the same safe summary to app diagnostics.",
+    "pl": "Retrieves existing grid charging settings, target SOC, charge power and schedules. No inverter settings are changed. Returns a redacted text token in Advanced Flow and writes the same safe summary to app diagnostics.",
+    "ru": "Retrieves existing grid charging settings, target SOC, charge power and schedules. No inverter settings are changed. Returns a redacted text token in Advanced Flow and writes the same safe summary to app diagnostics.",
+    "ko": "Retrieves existing grid charging settings, target SOC, charge power and schedules. No inverter settings are changed. Returns a redacted text token in Advanced Flow and writes the same safe summary to app diagnostics.",
+    "ar": "Retrieves existing grid charging settings, target SOC, charge power and schedules. No inverter settings are changed. Returns a redacted text token in Advanced Flow and writes the same safe summary to app diagnostics."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=battery2",
+      "title": {
+        "en": "Battery",
+        "nl": "Batterij",
+        "da": "Battery",
+        "de": "Battery",
+        "es": "Battery",
+        "fr": "Battery",
+        "it": "Battery",
+        "no": "Battery",
+        "sv": "Battery",
+        "pl": "Battery",
+        "ru": "Battery",
+        "ko": "Battery",
+        "ar": "Battery"
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "name": "report",
+      "type": "string",
+      "title": {
+        "en": "Sanitized charge settings (JSON)",
+        "nl": "Laadinstellingen zonder identificerende gegevens (JSON)",
+        "da": "Sanitized charge settings (JSON)",
+        "de": "Sanitized charge settings (JSON)",
+        "es": "Sanitized charge settings (JSON)",
+        "fr": "Sanitized charge settings (JSON)",
+        "it": "Sanitized charge settings (JSON)",
+        "no": "Sanitized charge settings (JSON)",
+        "sv": "Sanitized charge settings (JSON)",
+        "pl": "Sanitized charge settings (JSON)",
+        "ru": "Sanitized charge settings (JSON)",
+        "ko": "Sanitized charge settings (JSON)",
+        "ar": "Sanitized charge settings (JSON)"
+      }
+    }
+  ]
+}

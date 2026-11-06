@@ -288,6 +288,10 @@ module.exports = class MyApp extends Homey.App {
 
             return;
           }
+          if (action.id === 'arkxh_read_charge_settings') {
+            const summary = await args.device.readArkxhChargeSettings();
+            return { report: JSON.stringify(summary) };
+          }
           args.device.log(`Flow action ${action.id} called with value ${args.val}`);
           await args.device.handleFlowAction({ action: action.id, val: args.val });
         } catch (error) {
