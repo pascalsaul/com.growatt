@@ -49,5 +49,5 @@ module.exports = async (t) => {
   const manifest = JSON.parse(fs.readFileSync(path.join(testRoot, 'app.json'), 'utf8'));
   const action = manifest.flow.actions.find((entry) => entry.id === 'arkxh_read_charge_settings');
   t.ok(action, 'read-only Flow action declared');
-  t.ok(action.tokens.some((token) => token.name === 'report' && token.type === 'text'), 'redacted JSON return token exposed');
+  t.ok(action.tokens.some((token) => token.name === 'report' && token.type === 'string'), 'redacted JSON return token exposed');
 };

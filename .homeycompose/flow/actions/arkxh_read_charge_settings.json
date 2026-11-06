@@ -54,7 +54,7 @@
   "tokens": [
     {
       "name": "report",
-      "type": "text",
+      "type": "string",
       "title": {
         "en": "Sanitized charge settings (JSON)",
         "nl": "Laadinstellingen zonder identificerende gegevens (JSON)",
